@@ -4,6 +4,7 @@
     <?=$this->Html->charset() ?>
     <title><?=$this->fetch('title') ?></title>
     <?=$this->Html->css('hello') ?>
+    <?=$this->Html->css('Lotteryapp/lotteryapp') ?>
     <?=$this->Html->script('hello') ?>
 </head>
 <body>
