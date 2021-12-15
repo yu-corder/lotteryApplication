@@ -23,6 +23,10 @@ class ApplicantsController extends AppController {
                   $data = $this->Ten_applicants->find('all');
                   break;
             }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Lotteryapp', 'action' => 'index']
+            );
         }
         $this->set('header', ['subtitle' => 'LIVE模擬抽選アプリ']);
         $this->set('footer', ['copyright' => 'yu-yu']);
@@ -31,25 +35,14 @@ class ApplicantsController extends AppController {
     }
 
     public function new() {
+        /*新規データ追加 応募者テーブル数が多いため自動で追加*/
+        $this->autoRender = false;
         // 保存するデータ(２つ)
         $data = [];
-        for ($i = 1; $i < 30001; $i++) {
-            $data = [
-                [
-                    'name' => 'test' . $i
-                ]
-            ];
+        for ($i = 3; $i < 10; $i++) {
+            $user = ['name' => 'test' . $i];
+            $data[] = $user;
         }
-        $data = [
-            [
-                'title' => 'First post',
-                'published' => 1
-            ],
-            [
-                'title' => 'Second post',
-                'published' => 1
-            ],
-        ];
         // 実行クエリ
         $query = $this->Applicants->query();
         $query->insert(['name']);
@@ -59,5 +52,6 @@ class ApplicantsController extends AppController {
         }
         // 実行
         $query->execute();
+        echo "A";
     }
 }
