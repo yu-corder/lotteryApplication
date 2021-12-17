@@ -3,16 +3,20 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
 
 class ApplicantsController extends AppController {
 
     public function index() {
+        $connection = ConnectionManager::get('default');
         if (isset($_POST['applicants_num']) && isset($_POST['winner_cap'])) {
             $applicants_num = $_POST['applicants_num'];
             $winner_cap = $_POST['winner_cap'];
             switch (true) {
                 case $applicants_num == 3:
-                  $data = $this->Applicants->find('all');
+                  $connection->logQueries(true);
+                  $data = $this->Applicants->find('random');
+                  $connection->logQueries(false);
                   break;
                 case $applicants_num == 5:
                   $this->loadModel('Five_applicants');
@@ -37,7 +41,6 @@ class ApplicantsController extends AppController {
     public function new() {
         /*新規データ追加 応募者テーブル数が多いため自動で追加*/
         $this->autoRender = false;
-        // 保存するデータ(２つ)
         $data = [];
         for ($i = 3; $i < 10; $i++) {
             $user = ['name' => 'test' . $i];

@@ -282,7 +282,7 @@ return [
             'timezone' => 'Asia/Tokyo',
             'flags' => [],
             'cacheMetadata' => true,
-            'log' => false,
+            'log' => true,
 
             /*
              * Set identifier quoting to true if you are using reserved words or
@@ -322,7 +322,7 @@ return [
             'timezone' => 'Asia/Tokyo',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
-            'log' => false,
+            'log' => true,
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             //'url' => env('DATABASE_TEST_URL', null),
         ],
