@@ -7,13 +7,13 @@
             <th>同行者</th>
         </tr>
     </thead>
-    <?php foreach ($data->toArray() as $obj) : ?>
+    <?php foreach ($data as $obj) : ?>
         <tr>
-            <td><?=h($obj->id) ?></td>
-            <td><?=h($obj->name) ?></td>
+            <td><?= h($obj['id']) ?></td>
+            <td><?= h($obj['name']) ?></td>
             <td>
-                <?php if (isset($obj->accompanying_person_name)) : ?>
-                    <?=h($obj->accompanying_person_name) ?>
+                <?php if (isset($obj['accompanying_person_name'])) : ?>
+                    <?=h($obj['accompanying_person_name']) ?>
                 <?php else : ?>
                     なし
                 <?php endif; ?>
