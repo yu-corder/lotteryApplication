@@ -14,14 +14,34 @@ class ApplicantsController extends AppController {
             $winner_cap = $_POST['winner_cap'];
             switch (true) {
                 case $applicants_num == 3:
-                  $connection->logQueries(true);
-                  $data = $this->Applicants->find('random');
-                  $connection->logQueries(false);
+                  $data = $this->Applicants->find('random', ['winner_cap' => $winner_cap]);
                   break;
                 case $applicants_num == 5:
-                  $this->loadModel('Five_applicants');
-                  $data = $this->Five_applicants->find('all');
-                  break;
+                    //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
+                    //応募者の人数よりも会場キャパの人数が多いなら全員当選
+                        if ($winner_cap < 50000) {
+                        $rands = [];
+                        $min = 1;
+                        $max = 50000;
+                        $count = 0;
+                        while ($count <= $winner_cap) {
+                            $tmp = mt_rand($min, $max);
+                            if(!in_array($tmp, $rands)){
+                                $rands[] = $tmp;
+                                $count++;
+                            }
+                        }
+                        $random = join(",", $rands);
+                        $connection = ConnectionManager::get('default');
+                        $sql = "SELECT * FROM lotteryapp.applicants WHERE id IN ({$random})";
+                        $data = $connection->execute($sql)->fetchAll('assoc');
+
+                    } else {
+                        $connection = ConnectionManager::get('default');
+                        $sql = "SELECT * FROM lotteryapp.applicants";
+                        $data = $connection->execute($sql)->fetchAll('assoc');
+                    }
+                    break;
                 case $applicants_num == 10;
                   $this->loadModel('Ten_applicants');
                   $data = $this->Ten_applicants->find('all');
@@ -41,13 +61,14 @@ class ApplicantsController extends AppController {
     public function new() {
         /*新規データ追加 応募者テーブル数が多いため自動で追加*/
         $this->autoRender = false;
+        $this->loadModel('Five_applicants');
         $data = [];
-        for ($i = 3; $i < 10; $i++) {
+        for ($i = 4; $i < 50001; $i++) {
             $user = ['name' => 'test' . $i];
             $data[] = $user;
         }
         // 実行クエリ
-        $query = $this->Applicants->query();
+        $query = $this->Five_applicants->query();
         $query->insert(['name']);
         // dataの数だけvalues追加
         foreach ($data as $d) {

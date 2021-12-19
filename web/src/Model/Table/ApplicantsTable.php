@@ -15,35 +15,32 @@ class ApplicantsTable extends Table {
         $this->setPrimaryKey('id');
     }
 
-    //応募者テーブルの中からランダムに3万人抽出
+    //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
+    //応募者の人数よりも会場キャパの人数が多いなら全員当選
     public function findRandom(Query $query, array $options) {
-        $rands = [];
-        $min = 1;
-        $max = 9;
-        for($i = $min; $i <= $max; $i++){
-            while(true){
-                /** 一時的な乱数を作成 */
+        if ($options['winner_cap'] < 30000) {
+            $rands = [];
+            $min = 1;
+            $max = 30000;
+            $count = 0;
+            $winner_cap = $options['winner_cap'];
+            while ($count <= $winner_cap) {
                 $tmp = mt_rand($min, $max);
-
-                /*
-                * 乱数配列に含まれているならwhile続行、
-                * 含まれてないなら配列に代入してbreak
-                */
-                if(!in_array($tmp, $rands) ){
+                if(!in_array($tmp, $rands)){
                     $rands[] = $tmp;
-                    break;
+                    $count++;
                 }
             }
+            $random = join(",", $rands);
+            $connection = ConnectionManager::get('default');
+            $sql = "SELECT * FROM lotteryapp.applicants WHERE id IN ({$random})";
+            $rc = $connection->execute($sql)->fetchAll('assoc');
+            return $rc;
+        } else {
+            $connection = ConnectionManager::get('default');
+            $sql = "SELECT * FROM lotteryapp.applicants";
+            $rc = $connection->execute($sql)->fetchAll('assoc');
+            return $rc;
         }
-        $random = join(",", $rands);
-        $connection = ConnectionManager::get('default');
-        $sql = "SELECT * FROM lotteryapp.applicants WHERE id IN ({$random})";
-        $rc = $connection->execute($sql)->fetchAll('assoc');
-        return $rc;
-    }
-
-    public function findSelectId(Query $query, array $options)
-    {
-        return $query->select(['id']);
     }
 }

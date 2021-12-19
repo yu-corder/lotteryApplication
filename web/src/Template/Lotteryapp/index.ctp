@@ -13,9 +13,9 @@
 
     <div>
         <p>ライブ会場キャパ</p>
-        <input type="radio" name="winner_cap" id="winner_cap_1.5" value="1.5" checked><label for="winner_cap_1.5" class="links">1.5万人</label>
-        <input type="radio" name="winner_cap" id="winner_cap_3" value="3" ><label for="winner_cap_3" class="links">3万人</label>
-        <input type="radio" name="winner_cap" id="winner_cap_5" value="5" ><label for="winner_cap_5" class="links">5万人</label>
+        <input type="radio" name="winner_cap" id="winner_cap_1.5" value="15000" checked><label for="winner_cap_1.5" class="links">1.5万人</label>
+        <input type="radio" name="winner_cap" id="winner_cap_3" value="30000" ><label for="winner_cap_3" class="links">3万人</label>
+        <input type="radio" name="winner_cap" id="winner_cap_5" value="50000" ><label for="winner_cap_5" class="links">5万人</label>
     </div>
 
     <button class="account_next_link links en-bold dev-heavy"><?php echo __('Next');?></button>
