@@ -19,7 +19,7 @@ class ApplicantsController extends AppController {
                 case $applicants_num == 5:
                     //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
                     //応募者の人数よりも会場キャパの人数が多いなら全員当選
-                        if ($winner_cap < 50000) {
+                    if ($winner_cap < 50000) {
                         $rands = [];
                         $min = 1;
                         $max = 50000;
@@ -33,19 +33,41 @@ class ApplicantsController extends AppController {
                         }
                         $random = join(",", $rands);
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.applicants WHERE id IN ({$random})";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id IN ({$random})";
                         $data = $connection->execute($sql)->fetchAll('assoc');
 
                     } else {
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.applicants";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants";
                         $data = $connection->execute($sql)->fetchAll('assoc');
                     }
                     break;
                 case $applicants_num == 10;
-                  $this->loadModel('Ten_applicants');
-                  $data = $this->Ten_applicants->find('all');
-                  break;
+                   //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
+                   //応募者の人数よりも会場キャパの人数が多いなら全員当選
+                   if ($winner_cap < 1000000) {
+                        $rands = [];
+                        $min = 1;
+                        $max = 100000;
+                        $count = 0;
+                        while ($count <= $winner_cap) {
+                            $tmp = mt_rand($min, $max);
+                            if(!in_array($tmp, $rands)){
+                                $rands[] = $tmp;
+                                $count++;
+                            }
+                        }
+                        $random = join(",", $rands);
+                        $connection = ConnectionManager::get('default');
+                        $sql = "SELECT * FROM lotteryapp.ten_applicants WHERE id IN ({$random})";
+                        $data = $connection->execute($sql)->fetchAll('assoc');
+
+                    } else {
+                        $connection = ConnectionManager::get('default');
+                        $sql = "SELECT * FROM lotteryapp.ten_applicants";
+                        $data = $connection->execute($sql)->fetchAll('assoc');
+                    }
+                    break;
             }
         } else {
             return $this->redirect(
@@ -61,14 +83,14 @@ class ApplicantsController extends AppController {
     public function new() {
         /*新規データ追加 応募者テーブル数が多いため自動で追加*/
         $this->autoRender = false;
-        $this->loadModel('Five_applicants');
+        $this->loadModel('Ten_applicants');
         $data = [];
-        for ($i = 4; $i < 50001; $i++) {
+        for ($i = 3; $i < 100001; $i++) {
             $user = ['name' => 'test' . $i];
             $data[] = $user;
         }
         // 実行クエリ
-        $query = $this->Five_applicants->query();
+        $query = $this->Ten_applicants->query();
         $query->insert(['name']);
         // dataの数だけvalues追加
         foreach ($data as $d) {
