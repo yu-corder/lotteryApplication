@@ -21,8 +21,8 @@ class ApplicantsController extends AppController {
                     //応募者の人数よりも会場キャパの人数が多いなら全員当選
                     if ($winner_cap < 50000) {
                         $rands = [];
-                        $min = 1;
-                        $max = 50000;
+                        $min = 2;
+                        $max = 50001;
                         $count = 0;
                         while ($count <= $winner_cap) {
                             $tmp = mt_rand($min, $max);
@@ -47,8 +47,8 @@ class ApplicantsController extends AppController {
                    //応募者の人数よりも会場キャパの人数が多いなら全員当選
                    if ($winner_cap < 1000000) {
                         $rands = [];
-                        $min = 1;
-                        $max = 100000;
+                        $min = 3;
+                        $max = 100002;
                         $count = 0;
                         while ($count <= $winner_cap) {
                             $tmp = mt_rand($min, $max);

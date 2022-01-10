@@ -2,3 +2,11 @@
     width: 100%;
     margin: 30px;
 }
+.winning_text {
+    font-size: 25px;
+    color: #de1b0d;
+}
+.lost_text {
+    font-size: 25px;
+    color: #0a82d1;
+}

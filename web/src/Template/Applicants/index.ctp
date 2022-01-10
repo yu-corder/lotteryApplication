@@ -1,23 +1,14 @@
-<p>テストユーザ表示</p>
-<table>
-    <thead>
-        <tr>
-            <th>UserID</th>
-            <th>名前</th>
-            <th>同行者</th>
-        </tr>
-    </thead>
-    <?php foreach ($data as $obj) : ?>
-        <tr>
-            <td><?= h($obj['id']) ?></td>
-            <td><?= h($obj['name']) ?></td>
-            <td>
-                <?php if (isset($obj['accompanying_person_name'])) : ?>
-                    <?=h($obj['accompanying_person_name']) ?>
-                <?php else : ?>
-                    なし
-                <?php endif; ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+<h2>当落結果表示</h2>
+<?php $chk = false; ?>
+<?php foreach ($data as $obj) : ?>
+    <?php
+        if ($obj['name'] == '戸田優也') {
+            $chk = true;
+        }
+    ?>
+<?php endforeach; ?>
+<?php if ($chk) : ?>
+    <p class="winning_text">当選!</p>
+<?php else : ?>
+    <p class="lost_text">落選</p>
+<?php endif; ?>
