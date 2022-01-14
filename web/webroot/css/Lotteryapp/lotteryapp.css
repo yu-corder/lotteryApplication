@@ -10,3 +10,52 @@
     font-size: 25px;
     color: #0a82d1;
 }
+
+/* フォームcss */
+.applicants_radio, .cap_radio {
+    display: none;
+}
+.links {
+    display: block;
+    margin-left: 50px;
+    height: 100px;
+    width: 150px;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 10%;
+    line-height: 100px;
+    background: rgba(44,125,212,0.1);
+    box-shadow: 4px 4px;
+    cursor: pointer;
+
+}
+.form-container {
+    display: flex;
+}
+.form_text {
+    margin-left: 40px;
+    font-size: 20px;
+}
+.push_checked {
+    background: rgba(44,125,212,0.4);
+}
+.account_next_link {
+    margin-left: 50px;
+    margin-top: 40px;
+    border-radius: 10%;
+    background: rgba(44,125,212,0.1);
+    height: 50px;
+    width: 100px;
+    cursor: pointer;
+}
+.account_next_link:hover {
+    background: rgba(44,125,212,0.4);
+}
+.form_box {
+    margin-top: 50px;
+}
+
+/* 当落ページ */
+.winpage-container {
+    padding: 50px;
+}
