@@ -17,6 +17,7 @@ class ApplicantsTable extends Table {
 
     //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
     //応募者の人数よりも会場キャパの人数が多いなら全員当選
+    //ただし、重複応募、ブラックリスト排除
     public function findRandom(Query $query, array $options) {
         if ($options['winner_cap'] < 30000) {
             $rands = [];

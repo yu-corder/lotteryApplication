@@ -19,6 +19,7 @@ class ApplicantsController extends AppController {
                 case $applicants_num == 5:
                     //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
                     //応募者の人数よりも会場キャパの人数が多いなら全員当選
+                    //ただし、重複応募、ブラックリスト排除
                     if ($winner_cap < 50000) {
                         $rands = [];
                         $min = 2;
@@ -45,6 +46,7 @@ class ApplicantsController extends AppController {
                 case $applicants_num == 10;
                    //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
                    //応募者の人数よりも会場キャパの人数が多いなら全員当選
+                   //ただし、重複応募、ブラックリスト排除
                    if ($winner_cap < 1000000) {
                         $rands = [];
                         $min = 3;
@@ -95,6 +97,28 @@ class ApplicantsController extends AppController {
         // dataの数だけvalues追加
         foreach ($data as $d) {
             $query->values($d);
+        }
+        // 実行
+        $query->execute();
+        echo "A";
+    }
+
+    public function add_person_name() {
+        /*同行者追加*/
+        $this->autoRender = false;
+        $this->loadModel('Applicants');
+        $data = [];
+        $data_2 = [];
+        // for ($i = 3; $i < 100001; $i++) {
+        //     $user = ['accompanying_person_name' => 'test' . $i];
+        //     $data[] = $user;
+        // }
+        // 実行クエリ
+        $query = $this->Applicants->query();
+        $query->update();
+        // dataの数だけvalues追加
+        foreach ($data as $d) {
+            $query->set()->where();
         }
         // 実行
         $query->execute();
