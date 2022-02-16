@@ -103,25 +103,59 @@ class ApplicantsController extends AppController {
         echo "A";
     }
 
-    public function add_person_name() {
+    public function addPerson() {
         /*同行者追加*/
         $this->autoRender = false;
         $this->loadModel('Applicants');
         $data = [];
         $data_2 = [];
-        // for ($i = 3; $i < 100001; $i++) {
-        //     $user = ['accompanying_person_name' => 'test' . $i];
-        //     $data[] = $user;
-        // }
+        for ($i = 15; $i < 30001; $i + 15) {
+            $user = ['accompanying_person_name' => 'test' . $i];
+            $data[] = $user;
+            $id = ['id' => $i - 15];
+            $data_2[] = $id;
+        }
+        var_dump($data);
+        exit;
         // 実行クエリ
         $query = $this->Applicants->query();
         $query->update();
+        // $query->set(['accompanying_person_name' => 'test3'])->where(['id' => 1]);
         // dataの数だけvalues追加
-        foreach ($data as $d) {
-            $query->set()->where();
+        foreach ($data as $k => $v) {
+            $query->set($v)->where($data_2[$k]);
         }
         // 実行
         $query->execute();
         echo "A";
+    }
+
+    //リンクが有効かチェック
+    //環境を作るのが面倒だったためすでに作成済みのここに追加...
+    public function search() {
+        $this->autoRender = false;
+        $data = [
+        ];
+
+        foreach ($data as $v) {
+            $url = "https://pigment.tokyo/ja/feature/detail?id=";
+            $url_2 = $url . $v;
+            $conn = curl_init(); // cURLセッションの初期化
+            curl_setopt($conn, CURLOPT_URL, $url_2); //　取得するURLを指定
+            curl_setopt($conn, CURLOPT_HTTPHEADER, array());
+            curl_setopt($conn, CURLOPT_HEADER, 1);
+            curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
+            $res =  curl_exec($conn);
+            $info = curl_getinfo ($conn);
+            $http_code = $info['http_code'];
+            curl_close($conn); //セッションの終了
+            if ($http_code != '200') {
+                echo $v . "\n";
+                exit;
+            }
+        }
+
+        echo "DD";
+        exit;
     }
 }
