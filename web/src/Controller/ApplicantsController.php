@@ -7,6 +7,7 @@ use Cake\Datasource\ConnectionManager;
 
 class ApplicantsController extends AppController {
 
+    //テストテストテスト
     public function index() {
         $connection = ConnectionManager::get('default');
         if (isset($_POST['applicants_num']) && isset($_POST['winner_cap'])) {
@@ -134,6 +135,7 @@ class ApplicantsController extends AppController {
     //リンクが有効かチェック
     //環境を作るのが面倒だったためすでに作成済みのここに追加...
     public function search() {
+        #テスト
         $this->autoRender = false;
         $data = [
         ];
