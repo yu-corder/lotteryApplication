@@ -84,6 +84,7 @@ class ApplicantsController extends AppController {
 
     public function new() {
         /*新規データ追加 応募者テーブル数が多いため自動で追加*/
+        //テスト2テスト2
         $this->autoRender = false;
         $this->loadModel('Ten_applicants');
         $data = [];
@@ -133,30 +134,30 @@ class ApplicantsController extends AppController {
 
     //リンクが有効かチェック
     //環境を作るのが面倒だったためすでに作成済みのここに追加...
-    public function search() {
-        $this->autoRender = false;
-        $data = [
-        ];
+    // public function search() {
+    //     $this->autoRender = false;
+    //     $data = [
+    //     ];
 
-        foreach ($data as $v) {
-            $url = "https://pigment.tokyo/ja/feature/detail?id=";
-            $url_2 = $url . $v;
-            $conn = curl_init(); // cURLセッションの初期化
-            curl_setopt($conn, CURLOPT_URL, $url_2); //　取得するURLを指定
-            curl_setopt($conn, CURLOPT_HTTPHEADER, array());
-            curl_setopt($conn, CURLOPT_HEADER, 1);
-            curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
-            $res =  curl_exec($conn);
-            $info = curl_getinfo ($conn);
-            $http_code = $info['http_code'];
-            curl_close($conn); //セッションの終了
-            if ($http_code != '200') {
-                echo $v . "\n";
-                exit;
-            }
-        }
+    //     foreach ($data as $v) {
+    //         $url = "https://pigment.tokyo/ja/feature/detail?id=";
+    //         $url_2 = $url . $v;
+    //         $conn = curl_init(); // cURLセッションの初期化
+    //         curl_setopt($conn, CURLOPT_URL, $url_2); //　取得するURLを指定
+    //         curl_setopt($conn, CURLOPT_HTTPHEADER, array());
+    //         curl_setopt($conn, CURLOPT_HEADER, 1);
+    //         curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
+    //         $res =  curl_exec($conn);
+    //         $info = curl_getinfo ($conn);
+    //         $http_code = $info['http_code'];
+    //         curl_close($conn); //セッションの終了
+    //         if ($http_code != '200') {
+    //             echo $v . "\n";
+    //             exit;
+    //         }
+    //     }
 
-        echo "DD";
-        exit;
-    }
+    //     echo "DD";
+    //     exit;
+    // }
 }
