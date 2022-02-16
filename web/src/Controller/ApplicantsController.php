@@ -105,6 +105,7 @@ class ApplicantsController extends AppController {
 
     public function addPerson() {
         /*同行者追加*/
+        //テストテストテスト
         $this->autoRender = false;
         $this->loadModel('Applicants');
         $data = [];
