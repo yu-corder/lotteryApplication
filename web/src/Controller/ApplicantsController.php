@@ -7,7 +7,6 @@ use Cake\Datasource\ConnectionManager;
 
 class ApplicantsController extends AppController {
 
-    //テストテストテスト
     public function index() {
         $connection = ConnectionManager::get('default');
         if (isset($_POST['applicants_num']) && isset($_POST['winner_cap'])) {
@@ -85,7 +84,6 @@ class ApplicantsController extends AppController {
 
     public function new() {
         /*新規データ追加 応募者テーブル数が多いため自動で追加*/
-        //テスト2テスト2
         $this->autoRender = false;
         $this->loadModel('Ten_applicants');
         $data = [];
@@ -107,59 +105,72 @@ class ApplicantsController extends AppController {
 
     public function addPerson() {
         /*同行者追加*/
-        //テストテストテスト
         $this->autoRender = false;
-        $this->loadModel('Applicants');
+        $this->loadModel('Five_applicants');
         $data = [];
         $data_2 = [];
-        for ($i = 15; $i < 30001; $i + 15) {
-            $user = ['accompanying_person_name' => 'test' . $i];
+
+        //同行者data作成
+        for ($i = 50; $i < 50002; $i += 50) {
+            $user = ['accompanying_person_name' => $i];
             $data[] = $user;
-            $id = ['id' => $i - 15];
+            if ($i == 50) {
+                $id = ['id' => $i - 50 + 1];
+            } else {
+                $id = ['id' => $i - 50];
+            }
             $data_2[] = $id;
         }
-        var_dump($data);
-        exit;
-        // 実行クエリ
-        $query = $this->Applicants->query();
-        $query->update();
-        // $query->set(['accompanying_person_name' => 'test3'])->where(['id' => 1]);
-        // dataの数だけvalues追加
-        foreach ($data as $k => $v) {
-            $query->set($v)->where($data_2[$k]);
+
+        $count = 1;
+        foreach ($data_2 as $k => $v) {
+            //SELECT文
+            $person = $this->Five_applicants->find()->where($v)->first();
+
+            if($person){
+                //UPDATE文
+                $count++;
+                if ($count % 2 != 0) {
+                    $tmp_num = $tmp_person - 50;
+                    $data[$k]['accompanying_person_name'] = "test" . $tmp_num;
+                } else {
+                    $tmp_person = $data[$k]['accompanying_person_name'];
+                    $data[$k]['accompanying_person_name'] = "test" . $data[$k]['accompanying_person_name'];
+                }
+                $entity = $this->Five_applicants->patchEntity($person, $data[$k]);
+                $this->Five_applicants->save($entity);
+            }
         }
-        // 実行
-        $query->execute();
         echo "A";
     }
 
     //リンクが有効かチェック
+    //レスポンスステータスコードが200以外だとforeach文のifに入って該当のURLを表示する
     //環境を作るのが面倒だったためすでに作成済みのここに追加...
     public function search() {
-        #テスト
         $this->autoRender = false;
         $data = [
         ];
 
-    //     foreach ($data as $v) {
-    //         $url = "https://pigment.tokyo/ja/feature/detail?id=";
-    //         $url_2 = $url . $v;
-    //         $conn = curl_init(); // cURLセッションの初期化
-    //         curl_setopt($conn, CURLOPT_URL, $url_2); //　取得するURLを指定
-    //         curl_setopt($conn, CURLOPT_HTTPHEADER, array());
-    //         curl_setopt($conn, CURLOPT_HEADER, 1);
-    //         curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
-    //         $res =  curl_exec($conn);
-    //         $info = curl_getinfo ($conn);
-    //         $http_code = $info['http_code'];
-    //         curl_close($conn); //セッションの終了
-    //         if ($http_code != '200') {
-    //             echo $v . "\n";
-    //             exit;
-    //         }
-    //     }
+        foreach ($data as $v) {
+            $url = "https://pigment.tokyo/ja/feature/detail?id=";
+            $url_2 = $url . $v;
+            $conn = curl_init(); // cURLセッションの初期化
+            curl_setopt($conn, CURLOPT_URL, $url_2); //　取得するURLを指定
+            curl_setopt($conn, CURLOPT_HTTPHEADER, array());
+            curl_setopt($conn, CURLOPT_HEADER, 1);
+            curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1);
+            $res =  curl_exec($conn);
+            $info = curl_getinfo ($conn);
+            $http_code = $info['http_code'];
+            curl_close($conn); //セッションの終了
+            if ($http_code != '200') {
+                echo $v . "\n";
+                exit;
+            }
+        }
 
-    //     echo "DD";
-    //     exit;
-    // }
+        echo "DD";
+        exit;
+    }
 }
