@@ -34,12 +34,13 @@ class ApplicantsController extends AppController {
                         }
                         $random = join(",", $rands);
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id IN ({$random})";
+                        //$sql = "SELECT * FROM applicants WHERE name NOT IN (SELECT accompanying_person_name FROM applicants WHERE accompanying_person_name <> '')";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id IN ({$random}) AND name NOT IN (SELECT accompanying_person_name FROM lotteryapp.five_applicants WHERE accompanying_person_name <> '')";
                         $data = $connection->execute($sql)->fetchAll('assoc');
 
                     } else {
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.five_applicants";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE name NOT IN (SELECT accompanying_person_name FROM lotteryapp.five_applicants WHERE accompanying_person_name <> '')";
                         $data = $connection->execute($sql)->fetchAll('assoc');
                     }
                     break;
@@ -110,64 +111,38 @@ class ApplicantsController extends AppController {
 
         $data = [];
         $data_2 = [];
-        // for ($i = 3; $i < 50000; $i++) {
-        //     $id = ['id' => $i];
-        //     $data[] = $id;
-        // }
-        // for ($i = 1; $i < 50000; $i++) {
-        //     $id = ['id' => $i];
-        //     $data_2[] = $id;
-        //}
-        $id = ['id' => 3];
-        $id_2 = ['id' => 1];
-        $person = $this->Ten_applicants->find()->where($id)->first();
-        $entity = $this->Ten_applicants->patchEntity($person, $id_2);
-        $this->Ten_applicants->save($entity);
-        // foreach ($data as $k => $v) {
-        //     $person = $this->Ten_applicants->find()->where($v)->first();
-        //     if ($person) {
-        //         $entity = $this->Ten_applicants->patchEntity($person, $data_2[$k]);
-        //         $this->Ten_applicants->save($entity);
-        //     }
-        // }
-        echo "A";
-        // $data = [];
-        // $data_2 = [];
-
         // //同行者data作成
-        // for ($i = 100; $i < 100003; $i += 100) {
-        //     $user = ['accompanying_person_name' => $i];
-        //     $data[] = $user;
-        //     if ($i == 100) {
-        //         $id = ['id' => $i - 100 + 1];
-        //     } else {
-        //         $id = ['id' => $i - 100];
-        //     }
-        //     $data_2[] = $id;
-        // }
-        // var_dump($data_2);
-        // exit;
+        for ($i = 100; $i < 100000; $i += 100) {
+            $user = ['accompanying_person_name' => $i];
+            $data[] = $user;
+            if ($i == 100) {
+                $id = ['id' => $i - 100 + 1];
+            } else {
+                $id = ['id' => $i - 100];
+            }
+            $data_2[] = $id;
+        }
 
-        // $count = 2;
-        // foreach ($data_2 as $k => $v) {
-        //     //SELECT文
-        //     $person = $this->Ten_applicants->find()->where($v)->first();
+        $count = 2;
+        foreach ($data_2 as $k => $v) {
+            //SELECT文
+            $person = $this->Ten_applicants->find()->where($v)->first();
 
-        //     if($person){
-        //         //UPDATE文
-        //         $count++;
-        //         if ($count % 2 == 0) {
-        //             $tmp_num = $tmp_person - 100;
-        //             $data[$k]['accompanying_person_name'] = "test" . $tmp_num;
-        //         } else {
-        //             $tmp_person = $data[$k]['accompanying_person_name'];
-        //             $data[$k]['accompanying_person_name'] = "test" . $data[$k]['accompanying_person_name'];
-        //         }
-        //         $entity = $this->Ten_applicants->patchEntity($person, $data[$k]);
-        //         $this->Ten_applicants->save($entity);
-        //     }
-        // }
-        // echo "A";
+            if($person){
+                //UPDATE文
+                $count++;
+                if ($count % 2 == 0) {
+                    $tmp_num = $tmp_person - 100;
+                    $data[$k]['accompanying_person_name'] = "test" . $tmp_num;
+                } else {
+                    $tmp_person = $data[$k]['accompanying_person_name'];
+                    $data[$k]['accompanying_person_name'] = "test" . $data[$k]['accompanying_person_name'];
+                }
+                $entity = $this->Ten_applicants->patchEntity($person, $data[$k]);
+                $this->Ten_applicants->save($entity);
+            }
+        }
+        echo "A";
     }
 
     //リンクが有効かチェック
