@@ -59,3 +59,8 @@
 .winpage-container {
     padding: 50px;
 }
+
+/* 改善案 */
+.improvement_points_container {
+    border: #000 1px solid;
+}

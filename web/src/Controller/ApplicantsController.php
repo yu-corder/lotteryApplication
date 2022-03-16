@@ -15,6 +15,8 @@ class ApplicantsController extends AppController {
             switch (true) {
                 case $applicants_num == 3:
                   $data = $this->Applicants->find('random', ['winner_cap' => $winner_cap]);
+                  var_dump($data);
+                  exit;
                   break;
                 case $applicants_num == 5:
                     //応募者テーブルの中からランダムに会場のフルキャパの人数分抽出
@@ -35,12 +37,12 @@ class ApplicantsController extends AppController {
                         $random = join(",", $rands);
                         $connection = ConnectionManager::get('default');
                         //$sql = "SELECT * FROM applicants WHERE name NOT IN (SELECT accompanying_person_name FROM applicants WHERE accompanying_person_name <> '')";
-                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id IN ({$random}) AND name NOT IN (SELECT accompanying_person_name FROM lotteryapp.five_applicants WHERE accompanying_person_name <> '')";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id IN ({$random}) AND id NOT IN (SELECT id FROM lotteryapp.five_applicants WHERE name IN (SELECT accompanying_person_name FROM five_applicants WHERE accompanying_person_name <> '') or accompanying_person_name IN (SELECT name FROM five_applicants WHERE name IN (SELECT accompanying_person_name FROM five_applicants WHERE accompanying_person_name <> '')))";
                         $data = $connection->execute($sql)->fetchAll('assoc');
 
                     } else {
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE name NOT IN (SELECT accompanying_person_name FROM lotteryapp.five_applicants WHERE accompanying_person_name <> '')";
+                        $sql = "SELECT * FROM lotteryapp.five_applicants WHERE id NOT IN (SELECT id FROM lotteryapp.five_applicants WHERE name IN (SELECT accompanying_person_name FROM five_applicants WHERE accompanying_person_name <> '') or accompanying_person_name IN (SELECT name FROM five_applicants WHERE name IN (SELECT accompanying_person_name FROM five_applicants WHERE accompanying_person_name <> '')))";
                         $data = $connection->execute($sql)->fetchAll('assoc');
                     }
                     break;
@@ -62,12 +64,12 @@ class ApplicantsController extends AppController {
                         }
                         $random = join(",", $rands);
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.ten_applicants WHERE id IN ({$random})";
+                        $sql = "SELECT * FROM lotteryapp.ten_applicants WHERE id IN ({$random}) AND id NOT IN (SELECT id FROM lotteryapp.ten_applicants WHERE name IN (SELECT accompanying_person_name FROM ten_applicants WHERE accompanying_person_name <> '') or accompanying_person_name IN (SELECT name FROM ten_applicants WHERE name IN (SELECT accompanying_person_name FROM ten_applicants WHERE accompanying_person_name <> '')))";
                         $data = $connection->execute($sql)->fetchAll('assoc');
 
                     } else {
                         $connection = ConnectionManager::get('default');
-                        $sql = "SELECT * FROM lotteryapp.ten_applicants";
+                        $sql = "SELECT * FROM lotteryapp.ten_applicants WHERE id NOT IN (SELECT id FROM lotteryapp.ten_applicants WHERE name IN (SELECT accompanying_person_name FROM ten_applicants WHERE accompanying_person_name <> '') or accompanying_person_name IN (SELECT name FROM ten_applicants WHERE name IN (SELECT accompanying_person_name FROM ten_applicants WHERE accompanying_person_name <> '')))";
                         $data = $connection->execute($sql)->fetchAll('assoc');
                     }
                     break;
